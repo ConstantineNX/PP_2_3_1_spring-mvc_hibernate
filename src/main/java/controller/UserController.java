@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import service.UserDaoService;
 import java.util.List;
 
@@ -50,23 +51,32 @@ public class UserController {
     }
 
     @GetMapping("/update")
-    public String updateUserForm(@RequestParam("id") long id, Model model) {
+    public String updateUserForm(@RequestParam("id") long id,@ModelAttribute("error") String err, Model model) {
         User user = userDaoService.findById(id);
         model.addAttribute("user", user);
+        if (err != null) {
+            model.addAttribute("error", err);
+        }
         return "update-form";
     }
 
     @PostMapping("/update")
-    public String updateUser(@RequestParam("id") long id, @ModelAttribute User user) {
-        User newUser = userDaoService.findById(id);
-        newUser.setFirstName(user.getFirstName());
-        newUser.setLastName(user.getLastName());
-        newUser.setAge(user.getAge());
-        newUser.setCity(user.getCity());
-        newUser.setEmail(user.getEmail());
-        newUser.setPhone(user.getPhone());
-        userDaoService.update(newUser);
-        return "redirect:/users";
+    public String updateUser(@RequestParam("id") long id, @ModelAttribute User user, Model model) {
+        try {
+            User newUser = userDaoService.findById(id);
+            newUser.setFirstName(user.getFirstName());
+            newUser.setLastName(user.getLastName());
+            newUser.setAge(user.getAge());
+            newUser.setCity(user.getCity());
+            newUser.setEmail(user.getEmail());
+            newUser.setPhone(user.getPhone());
+            userDaoService.update(newUser);
+            return "redirect:/users";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "update-form";
+        }
+
     }
 
     @GetMapping("/search")

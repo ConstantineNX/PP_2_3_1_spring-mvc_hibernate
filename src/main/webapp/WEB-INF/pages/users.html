@@ -9,7 +9,7 @@
     border-collapse: collapse;
     width: 100%;
     max-width: 1000px;
-    margin-top: 40px;
+    margin: 40px auto 0;
     table-layout: fixed;
     }
     th, td {
@@ -48,6 +48,7 @@
         white-space: nowrap;
         text-align: center;
         vertical-align: middle;
+        padding: 8px 0;
     }
     </style>
 
@@ -66,31 +67,19 @@
         }
 
         /* Кнопка редактирования (карандаш) */
-        .btn-edit {
-            background-color: #4a6fa5;
-            color: white;
-            box-shadow: 0 2px 5px rgba(74, 111, 165, 0.3);
-        }
-
         .btn-edit:hover {
             background-color: #3a5a87;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(74, 111, 165, 0.4);
         }
-
-        /* Кнопка удаления (корзина) */
-        .btn-delete {
-            background-color: #dc3545;
-            color: white;
-            box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
-        }
-
+        /*Кнопка редактирования (корзина) */
         .btn-delete:hover {
             background-color: #c82333;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
         }
 
+        /* Кнопки сохранить и очистить */
         .btn-save, .btn-reset {
             padding: 12px 30px;
             border: none;
@@ -135,7 +124,7 @@
     </style>
 
     <style>
-        /* ===== ЗАГОЛОВОК ФОРМЫ ===== */
+        /* ==== ЗАГОЛОВОК ФОРМЫ ===== */
         h2 {
             color: #333;
             font-size: 24px;
@@ -144,7 +133,11 @@
             border-bottom: 2px solid #4a6fa5;
         }
 
-        /* ===== ФОРМА ДОБАВЛЕНИЯ ===== */
+        .centr-style {
+            text-align: center;
+        }
+
+        /* ===== ФОРМА ДОБАВЛЕНИЯ ====== */
         .user-form {
             max-width: 600px;
             margin: 20px auto;
@@ -199,7 +192,7 @@
 </head>
 
 <body>
-<h1>Управление пользователями</h1>
+<h1 class="centr-style" >Управление пользователями</h1>
 
 <h2>Поиск пользователя</h2>
 <form th:action="@{/search}" method="get">
@@ -207,7 +200,7 @@
     <button type="submit">Найти</button>
 </form>
 
-<div th:if="${foundUser != null}"style="color: rgba(92,20,20,0.99); margin: 10px 0;">
+<div th:if="${foundUser != null}"style="color: black; margin: 10px 0;">
     <h3>🔍 Результат поиска:</h3>
     <p th:text="'ID: ' + ${foundUser.id}"></p>
     <p th:text="'Имя: ' + ${foundUser.firstName}"></p>
@@ -222,7 +215,7 @@
     <strong>❌ Ошибка:</strong> <span th:text="${error}"></span>
 </div>
 
-<h2>Таблица пользователей</h2>
+<h2 class="centr-style" >Таблица пользователей</h2>
 <table>
     <thead>
     <tr>
@@ -252,7 +245,7 @@
         <td>
             <form th:action="@{/edit}" method="post" style="display:inline;">
                 <input type="hidden" name="id" th:value="${user.id}">
-                <button type="submit" class="btn-edit">&#9999;</button>
+                <button type="submit" class="btn-edit">&#9999;&#65039;</button>
             </form>
             <form th:action="@{/delete(id=${user.id})}" method="post" style="display:inline;">
                 <input type="hidden" name="id" th:value="${user.id}">
@@ -264,7 +257,7 @@
     </tbody>
 </table>
 
-<h2>&#10133; Добавить пользователя</h2>
+<h2 class="centr-style">&#10133; Добавить пользователя</h2>
 <form th:action="@{/save}" th:object="${user}" method="post" class="user-form">
     <div class="form-group">
         <label>Имя:</label>

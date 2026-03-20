@@ -38,6 +38,14 @@ public class UserDaoServiceImp implements UserDaoService {
     public User update(User user) {
         Objects.requireNonNull(user);
         Objects.requireNonNull(user.getId());
+        if (user.getFirstName() ==null || user.getLastName() == null || user.getEmail() ==null) {
+            throw new IllegalArgumentException("The user must have at least a name and an email address");
+        } else if (user.getFirstName().trim().isEmpty() || user.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("The user must have at least a name and an email address");
+        } else if (user.getFirstName().length() < 3 || user.getFirstName().length() > 30
+                || user.getLastName().length() < 3 || user.getLastName().length() > 30) {
+            throw new IllegalArgumentException("The first name must be between 3 and 30 characters");
+        }
         User user1 = userDao.findById(user.getId());
         user1.setFirstName(user.getFirstName());
         user1.setLastName(user.getLastName());
