@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import service.UserDaoService;
+
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Controller
@@ -83,10 +84,10 @@ public class UserController {
     public String searchUser(@RequestParam("id") Long id, Model model) {
         model.addAttribute("users", userDaoService.findAll());
         model.addAttribute("user", new User());
-        User user = userDaoService.findById(id);
-        if (user != null) {
+        try {
+            User user = userDaoService.findById(id);
             model.addAttribute("foundUser", user);
-        } else {
+        } catch (EntityNotFoundException e) {
             model.addAttribute("error", "the user was not found with the id " + id);
         }
         return "users";

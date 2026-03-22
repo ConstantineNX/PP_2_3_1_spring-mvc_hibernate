@@ -12,11 +12,11 @@ import java.util.Objects;
 @Service
 public class UserDaoServiceImp implements UserDaoService {
 
+    private final UserDao userDao;
+
     public UserDaoServiceImp(UserDao userDao) {
         this.userDao = userDao;
     }
-
-    private final UserDao userDao;
 
     @Transactional
     @Override
