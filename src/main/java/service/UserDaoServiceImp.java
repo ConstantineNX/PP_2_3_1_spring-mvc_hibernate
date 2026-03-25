@@ -37,10 +37,10 @@ public class UserDaoServiceImp implements UserDaoService {
     @Override
     public User update(Long id, User user) {
         Objects.requireNonNull(user);
-        Objects.requireNonNull(user.getId());
-        User user1 = userDao.findById(user.getId());
+        Objects.requireNonNull(id);
+        User user1 = userDao.findById(id);
         if (user1 == null) {
-            throw new EntityNotFoundException("User not found with id " + user.getId());
+            throw new EntityNotFoundException("User not found with id " + id);
         }
         user1.setFirstName(user.getFirstName());
         user1.setLastName(user.getLastName());
