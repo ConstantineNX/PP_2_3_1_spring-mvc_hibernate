@@ -11,6 +11,8 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
+import javax.servlet.Filter;
+
 @Configuration
 @EnableWebMvc
 @ComponentScan({"service", "config", "dao", "controller"})
@@ -20,22 +22,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     public WebConfig(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
-    }
-// метод чтобы увидеть стили
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/css/**")
-//                .addResourceLocations("/css/");
-//    }
-
-    @Bean
-    public SpringResourceTemplateResolver templateResolver() {
-        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
-        resolver.setApplicationContext(applicationContext);
-        resolver.setPrefix("/WEB-INF/pages/");
-        resolver.setSuffix(".html");
-        resolver.setCharacterEncoding("UTF-8");
-        return resolver;
     }
 
     @Bean
@@ -50,9 +36,26 @@ public class WebConfig implements WebMvcConfigurer {
     public void configureViewResolvers(ViewResolverRegistry registry) {
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
         viewResolver.setTemplateEngine(templateEngine());
-        viewResolver.setContentType("text/html; charset=UTF-8");
+        viewResolver.setContentType("text/html;charset=UTF-8");
         viewResolver.setCharacterEncoding("UTF-8");
         registry.viewResolver(viewResolver);
     }
 
+
+
+    @Bean
+    public SpringResourceTemplateResolver templateResolver() {
+        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
+        resolver.setApplicationContext(applicationContext);
+        resolver.setPrefix("/WEB-INF/pages/");
+        resolver.setSuffix(".html");
+        resolver.setCharacterEncoding("UTF-8");
+        return resolver;
+    }
+    // метод чтобы увидеть стили(может пригодиться при создании css файлов)
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/css/**")
+//                .addResourceLocations("/css/");
+//    }
 }

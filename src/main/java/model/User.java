@@ -2,9 +2,10 @@ package model;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.proxy.HibernateProxy;
+
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
@@ -20,9 +21,13 @@ public class User {
     private Long id;
 
     @Column(name = "first_Name")
+    @NotBlank(message = "First name is required")
+    @Size(min = 3, max = 30, message = "First name must be between 3 and 30 characters")
     private String firstName;
 
     @Column(name = "last_name")
+    @NotBlank(message = "Last name is required")
+    @Size(min = 3, max = 30, message = "Last name must be between 3 and 30 characters")
     private String lastName;
 
     @Column(name = "age")
@@ -33,7 +38,10 @@ public class User {
     @Column(name = "city")
     private String city;
 
+
     @Column(name = "email", nullable = false, length = 50)
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email should be valid")
     private String email;
 
     @Column(name = "phone", nullable = false, length = 12)
@@ -118,15 +126,30 @@ public class User {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null) return false;
+        Class <?> thisClass = this instanceof HibernateProxy
+                ? ((HibernateProxy)this).getHibernateLazyInitializer().getPersistentClass()
+                : this.getClass();
+        Class <?> thatClass = o instanceof HibernateProxy
+                ? ((HibernateProxy)o).getHibernateLazyInitializer().getPersistentClass()
+                : o.getClass();
+        if (thisClass != thatClass) return false;
         User user = (User) o;
-        return Objects.equals(email, user.email) && Objects.equals(phone, user.phone);
+        if (getId() != null && user.getId() != null)
+            return Objects.equals(getId(), user.getId());
+        else {
+            return Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getPhone(), user.getPhone());
+        }
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(email, phone);
+    public final int hashCode() {
+        if (getId() != null)
+            return Objects.hashCode(getId());
+        else {
+            return Objects.hash(email, phone);
+        }
     }
 }

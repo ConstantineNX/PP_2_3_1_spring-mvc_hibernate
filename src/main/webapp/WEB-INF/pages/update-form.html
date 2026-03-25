@@ -78,30 +78,33 @@
 
 
 <div class="user-form"> <h2>Обновление пользователя</h2>
-    <form th:action="@{/update}" method="post" class="form-group" >
-        <input type="hidden" name="id" th:value="${user.id}">
+    <form th:object="${user}" th:action="@{/update}" method="post" class="form-group" >
+        <input type="hidden" name="id" th:value="*{id}">
 
         <div th:if="${error != null and !error.isEmpty()}" style="color: red; margin-bottom: 15px;">
-            <strong>&#10060;ошибка:</strong><span th:text="${error}"></span>
+            <strong>❌ошибка:</strong> <span th:text="${error}"></span>
         </div>
 
             <label>Имя:</label>
-            <input type="text" name="firstName" th:value="${user.firstName}"><br>
+            <input type="text" th:field="*{firstName}"><br>
+            <span th:errors="*{firstName}" style="color: red; margin-bottom: 15px"></span>
 
             <label>Фамилия:</label>
-            <input type="text" name="lastName" th:value="${user.lastName}"><br>
+            <input type="text" th:field="*{lastName}"><br>
+            <span th:errors="*{lastName}" style="color: red; margin-bottom: 15px"></span>
 
             <label>Возраст:</label>
-            <input type="text" name="age" th:value="${user.age}"><br>
+            <input type="text" th:field="*{age}"><br>
 
             <label>Город:</label>
-            <input type="text" name="city" th:value="${user.city}"><br>
+            <input type="text" th:field="*{city}"><br>
 
             <label>Email:</label>
-            <input type="text" name="email" th:value="${user.email}"><br>
+            <input type="text" th:field="*{email}"><br>
+            <span th:errors="*{email}" style="color: red; margin-bottom: 15px"></span>
 
             <label>Телефон:</label>
-            <input type="text" name="phone" th:value="${user.phone}"><br>
+            <input type="text" th:field="*{phone}"><br>
 
          <div class="form-actions">
             <button type="submit"> Сохранить</button>
